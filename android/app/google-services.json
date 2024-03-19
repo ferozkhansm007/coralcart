@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "6674549621",
+    "project_id": "coralcart-cadc7",
+    "storage_bucket": "coralcart-cadc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6674549621:android:e7705888378ee059ae613c",
+        "android_client_info": {
+          "package_name": "com.example.coralcart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJirW83oi8Bj2JeTIbBBKS6ZCQBKX9Tzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
