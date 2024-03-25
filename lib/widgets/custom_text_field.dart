@@ -6,7 +6,8 @@ class CustomTextField extends StatelessWidget {
       required this.controller,
       required this.hintText,
       required this.label,
-      required this.validate});
+      required this.validate, 
+      });
 
   final TextEditingController controller;
   final String hintText;

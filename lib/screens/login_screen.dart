@@ -1,5 +1,6 @@
 import 'package:coralcart/screens/home_screen.dart';
 import 'package:coralcart/screens/register_screen.dart';
+import 'package:coralcart/screens/root_screen.dart';
 import 'package:coralcart/services/firebase_auth_services.dart';
 import 'package:coralcart/utils/helper.dart';
 import 'package:coralcart/widgets/custom_button.dart';
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Login',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
         ),
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Form(
         key: _formKey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Spacer(),
+          const Spacer(),
           CustomTextField(
             controller: emailController,
             hintText: 'enter your email',
@@ -65,8 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? Icons.visibility
                       : Icons.visibility_off),
                 ),
-                border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey)),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey)),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.blue),
                   borderRadius: BorderRadius.circular(10),
@@ -82,18 +83,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          _loading ? Center(child: CircularProgressIndicator(color: Colors.teal,),)  :
-          CustomButton(
-            buttonName: 'Login',
-            onPressed: loginHandler,
+          SizedBox(height: 50,),
+          _loading ? const Center(child: CircularProgressIndicator(color: Colors.teal,),)  :
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CustomButton(
+              buttonName: 'Login',
+              onPressed: loginHandler,
+              height: 60,
+            ),
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Dont have account",
-                style: TextStyle(color: const Color.fromARGB(255, 194, 69, 69)),
+                style: TextStyle(color: Color.fromARGB(255, 194, 69, 69)),
               ),
               TextButton(
                   style: ButtonStyle(
@@ -104,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterScreen(),
+                          builder: (context) => const RegisterScreen(),
                         ));
                   },
                   child: const Text('Register')),
@@ -133,15 +139,15 @@ class _LoginScreenState extends State<LoginScreen> {
         _loading = false;
 
         MotionToast.success(
-          title: Text("Success"),
-          description: Text("Registration Successful"),
+          title: const Text("Success"),
+          description: const Text("Login Successful"),
         ).show(context);
 
         if(context.mounted){
           Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => RootScreen(),
           ),
           (route) => false);
         }
@@ -154,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String error = getFirebaseAuthErrorMessage(e);
 
         MotionToast.warning(
-                title: Text("Warning"), 
+                title: const Text("Warning"), 
                 description: Text(error))
             .show(context);
       }

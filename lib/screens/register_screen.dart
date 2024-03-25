@@ -15,6 +15,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController userNameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -45,6 +46,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validate: (value) {
                   if (value!.isEmpty) {
                     return "fill the name";
+                  }
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CustomTextField(
+                controller: addressController,
+                hintText: 'Enter Your Address',
+                label: 'Address',
+                validate: (value) {
+                  if (value!.isEmpty) {
+                    return "fill the Address";
                   }
                 },
               ),
@@ -100,7 +114,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 },
               ),
-            _loading ? Center(child: CircularProgressIndicator(color: Colors.teal,),)  : CustomButton(buttonName: 'Register', onPressed: registerHandler)
+               SizedBox(
+                height: 40,
+              ),
+              Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _loading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.teal,
+                        ),
+                      )
+                    : CustomButton(
+                        buttonName: 'Register', onPressed: registerHandler),
+              )
             ]),
           ),
         ));
@@ -111,11 +138,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       FirebaseAuthService firebaseAuthService = FirebaseAuthService();
       try {
         setState(() {
-          _loading= true;
+          _loading = true;
         });
-        
+
         await firebaseAuthService.register(
           name: userNameController.text,
+          address: addressController.text,
           password: passwordController.text,
           phoneNumber: phoneController.text,
           email: emailController.text,
@@ -134,9 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
         String error = getFirebaseAuthErrorMessage(e);
 
-        MotionToast.warning(
-                title: Text("Warning"), 
-                description: Text(error))
+        MotionToast.warning(title: Text("Warning"), description: Text(error))
             .show(context);
       }
     }

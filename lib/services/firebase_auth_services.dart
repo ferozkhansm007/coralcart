@@ -6,6 +6,7 @@ class FirebaseAuthService {
   final _firebaseStore =FirebaseFirestore.instance;
   Future<void> register({
   required String name,
+  required String address,
   required String password,
   required String phoneNumber,
   required String email,
@@ -21,6 +22,7 @@ class FirebaseAuthService {
 
     await _firebaseStore.collection('userRegistration').doc(user!.uid).set({
       'name': name,
+      'address': address,
       'email': email,
       'phoneNumber': phoneNumber,
       'password' : password
