@@ -44,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             validate: (value) {
               return emailValidator(value!);
             },
+            input: TextInputType.text,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 30),

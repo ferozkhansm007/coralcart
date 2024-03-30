@@ -3,6 +3,8 @@ import 'package:coralcart/screens/product_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

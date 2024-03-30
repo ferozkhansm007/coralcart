@@ -53,4 +53,73 @@ class FirebaseAuthService {
       rethrow;
     }
   }
+
+
+
+Future<String> getAddress(String id) async {
+  try {
+    // Get a reference to the Firestore instance
+    FirebaseFirestore _firebaseStore = FirebaseFirestore.instance;
+
+    // Get the document snapshot
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firebaseStore.collection('userRegistration').doc(id).get();
+
+    // Check if the document exists
+    if (snapshot.exists) {
+      // Retrieve the address field from the document data
+      String address = snapshot.get('address');
+      return address;
+    } else {
+      print('Document does not exist');
+      return ''; // Return an empty string if the document does not exist
+    }
+  } catch (e) {
+    print('Error getting address: $e');
+    // Handle error
+    rethrow;// Return an empty string in case of error
+  }
 }
+
+  editprofile({required String username, required String email, required String phone, required String address}) {}
+String  getUserId(){
+
+   return _firebaseAuth.currentUser!.uid;
+
+  }
+
+  Future<void> edituserprofile({
+
+    required String username, 
+    required String email,
+     required String phone,
+      required String address
+      
+      })async{
+        try{
+
+          _firebaseStore.collection('userRegistration').doc(getUserId()).update({
+            'name':username,
+           'email':email,
+           'phoneNumber':phone,
+           'address':address
+            
+          });
+
+        }catch(e)
+        {
+          
+            rethrow;
+          
+
+        }
+
+     
+
+
+
+  }
+
+}
+  
+

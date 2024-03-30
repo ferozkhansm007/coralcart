@@ -43,14 +43,18 @@ class _PoductScreenState extends State<PoductScreen> {
                 hintText: 'Search at Coral Cart',
                 suffixIcon: Icon(Icons.search),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               ),
             ),
           ),
           SizedBox(height: 40),
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('product').where('catId', isEqualTo: widget.catid).snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('product')
+                  .where('catId', isEqualTo: widget.catid)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -65,17 +69,22 @@ class _PoductScreenState extends State<PoductScreen> {
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    var data = snapshot.data!.docs[index].data()
+                        as Map<String, dynamic>;
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ViewProductScreen(viewdata: data),
+                            builder: (context) =>
+                                ViewProductScreen(viewdata: data),
                           ),
                         );
                       },
-                      child: ProductWidget(productdata: data,id: snapshot.data!.docs[index].id,),
+                      child: ProductWidget(
+                        productdata: data,
+                        id: snapshot.data!.docs[index].id,
+                      ),
                     );
                   },
                 );
@@ -85,9 +94,7 @@ class _PoductScreenState extends State<PoductScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.large(
-        
         shape: CircleBorder(),
-        
         onPressed: () {
           // Add onPressed logic to navigate to the cart screen
           Navigator.push(
@@ -98,18 +105,19 @@ class _PoductScreenState extends State<PoductScreen> {
           );
         },
         backgroundColor: Colors.teal,
-        child: Icon(Icons.shopping_cart,
-        color: Colors.white,),
+        child: Icon(
+          Icons.shopping_cart,
+          color: Colors.white,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
-
 class ProductWidget extends StatefulWidget {
-   ProductWidget({super.key, required this.productdata,required this.id});
-  Map<String,dynamic> productdata;
+  ProductWidget({super.key, required this.productdata, required this.id});
+  Map<String, dynamic> productdata;
   String id;
 
   @override
@@ -117,122 +125,146 @@ class ProductWidget extends StatefulWidget {
 }
 
 class _ProductWidgetState extends State<ProductWidget> {
-
-
-  bool _loading=false;
+  bool _loading = false;
   @override
   Widget build(BuildContext context) {
     print(widget.productdata);
-    return _loading? Center(child: CircularProgressIndicator(color: Colors.teal,),) :Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.transparent,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image
-          Container(
-            width: 100,
-            height: 100,
-            margin: EdgeInsets.only(right: 10),
+    return _loading
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.teal,
+            ),
+          )
+        : Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey[300],
+              color: Colors.transparent,
             ),
-            child: Image.network(
-              widget.productdata['image'],
-              fit: BoxFit.cover,
-            ),
-          ),
-          // Product details
-          Expanded(
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.productdata['productname'],
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                // Image
+                Container(
+                  width: 100,
+                  height: 100,
+                  margin: EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[300],
+                  ),
+                  child: Image.network(
+                    widget.productdata['image'],
+                    fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 5),
-                Text(
-                  widget.productdata['discription'],
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  'Shop Name',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  widget.productdata['price'].toString(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: CustomButton(
-                      height: 40,
-                      buttonName: "Buy",
-                      onPressed: () async{
-                        print(await FirebaseAuth.instance.currentUser!.uid);
-  
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CheckoutScreen(),
-                        ));
+                // Product details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.productdata['productname'],
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        widget.productdata['discription'],
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        'User Name',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        widget.productdata['price'].toString(),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: CustomButton(
+                            height: 40,
+                            buttonName: "Buy",
+                            onPressed: () async {
+                              print(
+                                  await FirebaseAuth.instance.currentUser!.uid);
 
-                      },
-                    )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: CustomButton(
-                      height: 40,
-                      buttonName: "Add to Cart",
-                      onPressed: ()async {
-                       try{
-                        setState(() {
-                          _loading=true;
-                        });
-                       await FirebaseCartService().addCart(productId:widget.id , price: widget.productdata['price'], productName:  widget.productdata['productname'], imageUrl: widget.productdata['image']);
-                       setState(() {
-                         _loading=false;
-                       });
-                       MotionToast.success(title: Text("Success"), description: Text('Item Added'))
-            .show(context);
-                       }
-                       catch(e){
-                        setState(() {
-                          _loading=false;
-                        });
-                       
-                        print(e);
-                        
-                        MotionToast.warning(title: Text("Warning"), description: Text('Somethig Went Wrong'))
-            .show(context);
-                       } 
-                      },
-                    ))
-                  ],
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PaymentScreen(
+                                      address: 'address',
+                                      cartidlist: [],
+                                      productList: [
+                                        {
+                                          'productname':
+                                              widget.productdata['productname'],
+                                        }
+                                      ],
+                                      Total: 'total',
+                                    ),
+                                  ));
+                            },
+                          )),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: CustomButton(
+                            height: 40,
+                            buttonName: "Add to Cart",
+                            onPressed: () async {
+                              try {
+                                setState(() {
+                                  _loading = true;
+                                });
+                                await FirebaseCartService().addCart(
+                                    productId: widget.id,
+                                    price: widget.productdata['price'],
+                                    productName:
+                                        widget.productdata['productname'],
+                                    imageUrl: widget.productdata['image'],
+                                    sellerid: widget.productdata['sellerId']);
+                                setState(() {
+                                  _loading = false;
+                                });
+                                MotionToast.success(
+                                        title: Text("Success"),
+                                        description: Text('Item Added'))
+                                    .show(context);
+                              } catch (e) {
+                                setState(() {
+                                  _loading = false;
+                                });
+
+                                print(e);
+
+                                MotionToast.warning(
+                                        title: Text("Warning"),
+                                        description:
+                                            Text('Somethig Went Wrong'))
+                                    .show(context);
+                              }
+                            },
+                          ))
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

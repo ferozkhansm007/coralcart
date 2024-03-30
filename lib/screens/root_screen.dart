@@ -1,4 +1,5 @@
 import 'package:coralcart/screens/cart_screen.dart';
+import 'package:coralcart/screens/edit_profile.dart';
 import 'package:coralcart/screens/home_screen.dart';
 import 'package:coralcart/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class _RootScreenState extends State<RootScreen> {
   static List<Widget> _widgetOptions = <Widget>[
      HomeScreen(),
     CartScreen(),
-    ProfileScreen(),
+     ProfileScreen()
   ];
 
   void _onItemTapped(int index) {

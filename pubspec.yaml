@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^4.17.9
   motion_toast: ^2.8.0
   cloud_firestore: ^4.15.9
+  image_picker: ^1.0.7
+  
   
   
 

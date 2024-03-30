@@ -1,45 +1,144 @@
+import 'package:coralcart/screens/card_payment.dart';
+import 'package:coralcart/screens/home_screen.dart';
+import 'package:coralcart/screens/root_screen.dart';
+import 'package:coralcart/screens/your_orders.dart';
+import 'package:coralcart/services/firbase_cart_service.dart';
+import 'package:coralcart/services/firebase_order_services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key, required this.address,  
+  required this.productList, 
+  required this.Total, required this.cartidlist});
+
+
+  final String address;
+  final List productList;
+  final List cartidlist;
+  final String Total;
+
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
+  String _selectedPaymentMethod ='UPI' ;
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal, // Set app bar background color to teal
-        title: Text(
+        title: const Text(
           'Payment',
           style: TextStyle(color: Colors.white), // Set text color to white
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               'Select Payment Method',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement logic for payment method 1
+            const SizedBox(height: 20),
+            RadioListTile(
+              title: const Text('UPI'),
+              value: 'UPI',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (value) {
+                setState(() {
+                  _selectedPaymentMethod = value.toString();
+                });
               },
-              child: Text('UPI'),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Implement logic for payment method 2
+            if (_selectedPaymentMethod == 'UPI')
+              TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter UPI number',
+                ),
+                onChanged: (value) {
+                  // Handle UPI number input
+                },
+              ),
+            RadioListTile(
+              title: const Text('Credit / Debit Card'),
+              value: 'Card',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (value) {
+                setState(() {
+                  _selectedPaymentMethod = value.toString();
+                   Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => cardScreen(),
+                        ));
+                });
               },
-              child: Text('Credit / Debit Card'),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Implement logic for payment method 3
+            RadioListTile(
+              title: const Text('Cash on Delivery'),
+              value: 'COD',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (value) {
+                setState(() {
+                  _selectedPaymentMethod = value.toString();
+
+                  print(_selectedPaymentMethod);
+                });
               },
-              child: Text('Cash on Delivery'),
+            ),
+            const Spacer(),
+            loading? const Center(child: CircularProgressIndicator()) : ElevatedButton(
+              onPressed: ()  async{
+                
+                setState(() {
+                  loading = true;
+                });
+                await FirebaseOrderServices().placeOrder(cartidlist: widget.cartidlist, address: widget.address,paymentMethod:_selectedPaymentMethod,total:widget.Total,productList: widget.productList);
+                // Show custom pop-up message
+                      await showDialog(
+                        barrierDismissible:false ,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PopScope(
+                            canPop: false,
+                            child: AlertDialog(
+                              title: const Text('Order Placed!'),
+                              content: const Text('Your order has been successfully placed.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    
+                                   Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(
+                            builder: (context) => RootScreen(),
+                                                    ), (route) => false);
+                                    // Navigate back to home or any other screen
+                                    // Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                     
+                setState(() {
+                  loading=false;
+                });
+
+
+                
+              },
+              child: const Text('Place Your Order'),
             ),
           ],
         ),

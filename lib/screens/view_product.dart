@@ -29,7 +29,7 @@ class ViewProductScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 10),
-                Padding(
+                Expanded(child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,6 +58,9 @@ class ViewProductScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+              )
+              
+              
               ],
             ),
           ),

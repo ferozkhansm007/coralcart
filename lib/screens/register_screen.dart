@@ -47,7 +47,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value!.isEmpty) {
                     return "fill the name";
                   }
-                },
+                }, 
+                input: TextInputType.text,
               ),
               SizedBox(
                 height: 20,
@@ -61,6 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return "fill the Address";
                   }
                 },
+                input: TextInputType.text,
               ),
               SizedBox(
                 height: 20,
@@ -72,6 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validate: (value) {
                   return emailValidator(value!);
                 },
+                input: TextInputType.text,
               ),
               SizedBox(
                 height: 20,
@@ -85,6 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return "fill the phone";
                   }
                 },
+                input: TextInputType.number,
               ),
               SizedBox(
                 height: 20,
@@ -96,6 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validate: (value) {
                   return validatePassword(value!);
                 },
+                input: TextInputType.text,
               ),
               SizedBox(
                 height: 20,
@@ -112,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   } else {
                     return "fill the name";
                   }
-                },
+                }, input: TextInputType.text,
               ),
                SizedBox(
                 height: 40,
