@@ -1,6 +1,6 @@
 import 'package:coralcart/firebase_options.dart';
 import 'package:coralcart/screens/cart_screen.dart';
-import 'package:coralcart/screens/cartsample.dart';
+
 import 'package:coralcart/screens/checkout_screen.dart';
 import 'package:coralcart/screens/home_screen.dart';
 import 'package:coralcart/screens/login_screen.dart';

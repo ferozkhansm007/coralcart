@@ -1,13 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coralcart/screens/product_list.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,34 +12,42 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CurvedBottomContainer(
+    return Scaffold(
+     
+      body: Column(
+        children: [
+          SizedBox(height: 20,),
+          CurvedBottomContainer(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 3,
-            logo: Container(
-              color: Colors.white, // Replace with your logo asset
-              height: 50,
-              width: 50,
+            logo: Image.asset(
+              'assets/images/logo.png', // Replace with your image asset path
+              height: 100,
+              width: 100,
+              
             ),
+           
             searchBar: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const TextField(
-                    decoration: InputDecoration(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
                   hintText: 'Search',
                   suffixIcon: Icon(Icons.search),
                   border: InputBorder.none,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                )))),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: StreamBuilder<QuerySnapshot>(
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('category')
                     .snapshots(),
@@ -75,8 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  PoductScreen(catid: snapshot.data!.docs[index].id,), // Pass data to the ProductScreen
+                              builder: (context) => PoductScreen(
+                                catid: snapshot.data!.docs[index].id,
+                              ),
                             ),
                           );
                         },
@@ -117,10 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   );
-                }),
+                },
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
