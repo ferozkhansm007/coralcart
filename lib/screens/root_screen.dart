@@ -2,6 +2,7 @@ import 'package:coralcart/screens/cart_screen.dart';
 import 'package:coralcart/screens/edit_profile.dart';
 import 'package:coralcart/screens/home_screen.dart';
 import 'package:coralcart/screens/profile_screen.dart';
+import 'package:coralcart/screens/your_orders.dart';
 import 'package:flutter/material.dart';
 
 class RootScreen extends StatefulWidget {
@@ -15,7 +16,8 @@ class _RootScreenState extends State<RootScreen> {
   static List<Widget> _widgetOptions = <Widget>[
      HomeScreen(),
     CartScreen(),
-     ProfileScreen()
+      UserOrdersScreen(),
+      ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -39,12 +41,17 @@ class _RootScreenState extends State<RootScreen> {
             label: 'Cart',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'orders',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal, // Set selected item color to teal
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.grey, // Set selected item color to teal
         onTap: _onItemTapped,
       ),
     );

@@ -19,6 +19,9 @@ class PoductScreen extends StatefulWidget {
 }
 
 class _PoductScreenState extends State<PoductScreen> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +80,7 @@ class _PoductScreenState extends State<PoductScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ViewProductScreen(viewdata: data),
+                                ViewProductScreen(viewdata: data,productId: snapshot.data!.docs[index].id,),
                           ),
                         );
                       },

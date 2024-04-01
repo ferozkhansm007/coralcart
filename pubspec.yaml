@@ -40,7 +40,7 @@ dependencies:
   motion_toast: ^2.8.0
   cloud_firestore: ^4.15.9
   image_picker: ^1.0.7
-  
+  flutter_rating_bar: ^4.0.1
   
   
 
