@@ -46,6 +46,7 @@ class CartScreen extends StatelessWidget {
               total = subtotal + total;
             },
           );
+          
 
           cartChekout=snapshot.data!.docs;
 

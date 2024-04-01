@@ -70,6 +70,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         'productname': cartItem['productname'],
                         'productid': cartItem.id,
                         'sellerid': cartItem['sellerid'],
+                        'quantity': cartItem['quantity'],
+                        'sellerConfirm':false,
+                        'subtotal': (price * quantity).toString()
                       },
                     );
                   }
@@ -131,6 +134,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => PaymentScreen(
+                      cartidlist: [],
                       address: address!,
                       productList: productList,
                       Total: widget.total.toString(),
