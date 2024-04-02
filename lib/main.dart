@@ -9,6 +9,7 @@ import 'package:coralcart/screens/profile_screen.dart';
 import 'package:coralcart/screens/register_screen.dart';
 
 import 'package:coralcart/screens/root_screen.dart';
+import 'package:coralcart/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 void main() async {
@@ -16,6 +17,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp(home: RootScreen(),));
+  runApp(MaterialApp(home:SplashScreen(),));
 }
 

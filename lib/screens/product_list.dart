@@ -181,7 +181,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'User Name',
+                        widget.productdata['shopname']==null ? 'shopname':widget.productdata['shopname'],
                         style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                       SizedBox(height: 5),

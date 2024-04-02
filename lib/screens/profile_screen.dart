@@ -122,6 +122,31 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FirebaseAuthService().logout(); // Call logout function
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.red, // Set background color to red
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.logout,
+                          color: Colors.white, // Set icon color to white
+                        ),
+                        SizedBox(width: 5), // Add spacing between icon and text
+                        Text(
+                          'Logout',
+                          style: TextStyle(
+                            color: Colors.white, // Set font color to white
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

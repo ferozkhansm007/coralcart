@@ -16,6 +16,7 @@ class FirebaseReviewService {
     required String sellerId,
     required double rating,
     required String review,
+    required String productname
   
   }) async {
     try {
@@ -27,7 +28,8 @@ class FirebaseReviewService {
         'sellerId': sellerId,
         'rating': rating,
         'review': review,
-        'name' : data['name']
+        'name' : data['name'],
+        'productname': productname,
        
       });
     } catch (e) {

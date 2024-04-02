@@ -160,43 +160,52 @@ class CartItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(imageUrl),
-        ),
-        title: Text(productname),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Price: \Rs.${price.toStringAsFixed(2)}'),
-            Text('subtotal:\Rs. ${subtotal}'),
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.remove),
-              color: Colors.black,
-              onPressed: minus,
-            ),
-            Text(
-              quantity,
-              style: TextStyle(fontSize: 20),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              color: Colors.black,
-              onPressed: add,
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              color: Colors.black,
-              onPressed: onDelete,
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Card(
+        elevation: 4,
+         color: Colors.white, // Set the background color to white
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.teal, width: 1), // Add a teal-colored border
+      borderRadius: BorderRadius.circular(8), // Adjust the border radius as needed
+    ),
+        
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          title: Text(productname),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Price: \Rs.${price.toStringAsFixed(2)}'),
+              Text('subtotal:\Rs. ${subtotal}'),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(Icons.remove),
+                color: Colors.black,
+                onPressed: minus,
+              ),
+              Text(
+                quantity,
+                style: TextStyle(fontSize: 20),
+              ),
+              IconButton(
+                icon: Icon(Icons.add),
+                color: Colors.black,
+                onPressed: add,
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                color: Colors.black,
+                onPressed: onDelete,
+              ),
+            ],
+          ),
         ),
       ),
     );

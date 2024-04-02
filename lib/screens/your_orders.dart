@@ -1,9 +1,11 @@
 import 'package:coralcart/screens/orders_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserOrdersScreen extends StatelessWidget {
-  const UserOrdersScreen({Key? key});
+  UserOrdersScreen({Key? key});
+  final User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,10 @@ class UserOrdersScreen extends StatelessWidget {
         title: Text('Your Orders'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('orders').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('orders') // Change to 'orders' collection
+            .where('userid', isEqualTo: currentUser?.uid)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -49,8 +54,8 @@ class UserOrdersScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => OrderDetailsScreen(
-                            orderId:orders[index].id,orderData:orderData
-                                
+                            orderId: orders[index].id,
+                            orderData: orderData,
                           ),
                         ),
                       );

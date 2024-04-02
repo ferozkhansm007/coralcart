@@ -108,4 +108,12 @@ class FirebaseAuthService {
       rethrow;
     }
   }
+   Future<void> logout() async {
+    try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      print('Error logging out: $e');
+      // Handle error logging out
+    }
+  }
 }
