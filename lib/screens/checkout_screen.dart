@@ -127,6 +127,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                print(productList);
                 if (_addressController.text.isNotEmpty) {
                   address = _addressController.text;
                 }
@@ -143,7 +144,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 );
                 // Implement logic for placing the order
               },
-              child: Text('Payment'),
+              child: Text('Payment',
+              style: TextStyle(color: Colors.white),),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Set button color to teal
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                ),
             ),
           ],
         ),

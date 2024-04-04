@@ -57,6 +57,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   _selectedPaymentMethod = value.toString();
                 });
               },
+              activeColor: Colors.teal,
             ),
             if (_selectedPaymentMethod == 'UPI')
               TextField(
@@ -67,6 +68,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 onChanged: (value) {
                   // Handle UPI number input
                 },
+                
               ),
             RadioListTile(
               title: const Text('Credit / Debit Card'),
@@ -82,6 +84,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ));
                 });
               },
+              activeColor: Colors.teal,
             ),
             RadioListTile(
               title: const Text('Cash on Delivery'),
@@ -94,6 +97,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   print(_selectedPaymentMethod);
                 });
               },
+              activeColor: Colors.teal,
             ),
             const Spacer(),
             loading? const Center(child: CircularProgressIndicator()) : ElevatedButton(
@@ -102,6 +106,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 setState(() {
                   loading = true;
                 });
+
+               await  Future.delayed(Duration(seconds: 2));
+                
                 await FirebaseOrderServices().placeOrder(cartidlist: widget.cartidlist, address: widget.address,paymentMethod:_selectedPaymentMethod,total:widget.Total,productList: widget.productList);
                 // Show custom pop-up message
                       await showDialog(
@@ -138,7 +145,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                 
               },
-              child: const Text('Place Your Order'),
+              child: const Text('Place Your Order',
+              style: TextStyle(color: Colors.white),),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Set button color to teal
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                ),
             ),
           ],
         ),

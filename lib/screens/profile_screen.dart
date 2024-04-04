@@ -1,4 +1,5 @@
 import 'package:coralcart/screens/edit_profile.dart';
+import 'package:coralcart/screens/login_screen.dart';
 import 'package:coralcart/screens/your_orders.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +63,6 @@ class ProfileScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(height: 20),
-                 
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -93,13 +93,18 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                   ElevatedButton(
+                  ElevatedButton(
                     onPressed: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => 
-                     EditScreen(username: 'name', 
-                     email: 'email', 
-                     phone: 'phoneNumber', 
-                     address: 'address',),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditScreen(
+                              username: userData['name'],
+                              email: userData['email'],
+                              phone: userData['phoneNumber'],
+                              address: userData['address'],
+                            ),
+                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -124,24 +129,29 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      FirebaseAuthService().logout(); // Call logout function
+                      FirebaseAuthService().logout();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          )); // Call logout function
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          Colors.red, // Set background color to red
+                          Colors.white, // Set background color to red
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.logout,
-                          color: Colors.white, // Set icon color to white
+                          color: Colors.red, // Set icon color to white
                         ),
                         SizedBox(width: 5), // Add spacing between icon and text
                         Text(
                           'Logout',
                           style: TextStyle(
-                            color: Colors.white, // Set font color to white
+                            color: Colors.red, // Set font color to white
                           ),
                         ),
                       ],

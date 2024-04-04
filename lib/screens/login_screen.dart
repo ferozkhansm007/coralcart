@@ -84,16 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(height: 50,),
-          _loading ? const Center(child: CircularProgressIndicator(color: Colors.teal,),)  :
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomButton(
-              buttonName: 'Login',
-              onPressed: loginHandler,
-              height: 60,
-            ),
+          SizedBox(
+            height: 50,
           ),
+          _loading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.teal,
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomButton(
+                    buttonName: 'Login',
+                    onPressed: loginHandler,
+                    height: 60,
+                  ),
+                ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -124,19 +131,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginHandler() async {
     if (_formKey.currentState!.validate()) {
-       FirebaseAuthService firebaseAuthService = FirebaseAuthService();
-      try{
+      FirebaseAuthService firebaseAuthService = FirebaseAuthService();
+      try {
         setState(() {
-          _loading= true;
+          _loading = true;
         });
-        
+
         await firebaseAuthService.login(
-          
-          password: passwordController.text,
-        
           email: emailController.text,
+          password: passwordController.text,
         );
-        
+
         _loading = false;
 
         MotionToast.success(
@@ -144,26 +149,33 @@ class _LoginScreenState extends State<LoginScreen> {
           description: const Text("Login Successful"),
         ).show(context);
 
-        if(context.mounted){
+        if (context.mounted) {
           Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RootScreen(),
-          ),
-          (route) => false);
+            context,
+            MaterialPageRoute(
+              builder: (context) => RootScreen(),
+            ),
+            (route) => false,
+          );
         }
-
-      }
-      catch(e){
+      } catch (e) {
         setState(() {
           _loading = false;
         });
-        String error = getFirebaseAuthErrorMessage(e);
 
-        MotionToast.warning(
-                title: const Text("Warning"), 
-                description: Text(error))
-            .show(context);
+        String errorMessage = getFirebaseAuthErrorMessage(e);
+        print("Firebase Authentication Error: $errorMessage");
+
+        // Check if the error message indicates invalid credentials
+        if (errorMessage.toLowerCase().contains('invalid credentials')) {
+          print('Invalid email or password entered');
+        }
+
+        // Display an error toast message to the user
+        MotionToast.error(
+          title: const Text("Error"),
+          description: Text(errorMessage),
+        ).show(context);
       }
     }
   }

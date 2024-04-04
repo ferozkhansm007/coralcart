@@ -46,11 +46,13 @@ class FirebaseAuthService {
 
   Future<void> login({required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      var user = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

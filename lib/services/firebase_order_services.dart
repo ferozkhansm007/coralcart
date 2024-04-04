@@ -12,6 +12,8 @@ Future<void>placeOrder({required List cartidlist, required String address,requir
 
     var currentUserid= _firebaseAuth.currentUser!.uid;
 
+    print(productList);
+
     
 
   

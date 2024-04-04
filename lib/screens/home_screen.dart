@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 100,
               width: 100,
               
+              
             ),
            
             searchBar: Container(
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: const TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search',
+                  hintText: 'Search at Coral Cart',
                   suffixIcon: Icon(Icons.search),
                   border: InputBorder.none,
                   contentPadding:

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coralcart/services/firebase_auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -44,49 +46,6 @@ class _EditScreenState extends State<EditScreen> {
     }
   }
 
-  Future<void> _takePicture() async {
-    Navigator.pop(context); // Close the bottom sheet
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
-  }
-
-  void _showImagePickerModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Choose from Gallery'),
-                onTap: _pickImageFromGallery,
-              ),
-              ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text('Take a Picture'),
-                onTap: _takePicture,
-              ),
-              ListTile(
-                leading: Icon(Icons.cancel),
-                title: Text('Cancel'),
-                onTap: () {
-                  Navigator.pop(context); // Close the bottom sheet on cancel
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
     _usernameController.text = widget.username;
@@ -113,26 +72,7 @@ class _EditScreenState extends State<EditScreen> {
             children: [
               _imageFile == null
                   ? Stack(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          height: 250,
-                          color: Colors.grey[200],
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                _showImagePickerModal();
-                              },
-                              icon: Icon(
-                                Icons.add_photo_alternate,
-                                size: 40,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      children: [],
                     )
                   : Stack(
                       children: [
@@ -186,7 +126,13 @@ class _EditScreenState extends State<EditScreen> {
                         if (value!.isEmpty) {
                           return 'Email cannot be empty';
                         }
-                        // Add your email validation logic here
+                        // Regular expression pattern for email validation
+                        String emailPattern =
+                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                        RegExp regex = RegExp(emailPattern);
+                        if (!regex.hasMatch(value)) {
+                          return 'Enter a valid email address';
+                        }
                         return null;
                       },
                     ),
@@ -197,9 +143,15 @@ class _EditScreenState extends State<EditScreen> {
                       keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Phone cannot be empty';
+                          return 'Phone number cannot be empty';
                         }
-                        // Add your phone validation logic here
+                        // Regular expression pattern for phone number validation
+                        String phonePattern =
+                            r'^[0-9]{10}$'; // Assuming 10-digit phone number
+                        RegExp regex = RegExp(phonePattern);
+                        if (!regex.hasMatch(value)) {
+                          return 'Enter a valid 10-digit phone number';
+                        }
                         return null;
                       },
                     ),
@@ -221,7 +173,9 @@ class _EditScreenState extends State<EditScreen> {
                         : ElevatedButton(
                             onPressed: _saveProfile,
                             style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.teal,),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.teal,
+                            ),
                             child: Text('Update Profile'),
                           ),
                   ],
@@ -240,17 +194,44 @@ class _EditScreenState extends State<EditScreen> {
         _loading = true;
       });
 
-      // Implement your logic to save the profile details
-      // You can access the entered values using _usernameController.text, _emailController.text, etc.
+     
+     String? userId = FirebaseAuthService().getUserId();
 
-      // After saving the profile, you can navigate back or show a success message
-      MotionToast.success(
-        title: Text("Success"),
-        description: Text("Profile updated successfully"),
-      ).show(context);
+      // Get profile data from text controllers
+      String username = _usernameController.text;
+      String email = _emailController.text;
+      String phone = _phoneController.text;
+      String address = _addressController.text;
 
-      setState(() {
-        _loading = false;
+      // Update user's profile in Firestore
+      FirebaseFirestore.instance
+          .collection('userRegistration')
+          .doc(userId)
+          .set({
+        'name': username,
+        'email': email,
+        'phoneNumber': phone,
+        'address': address,
+      }).then((_) {
+        // Show success message
+        MotionToast.success(
+          title: Text("Success"),
+          description: Text("Profile updated successfully"),
+        ).show(context);
+
+        setState(() {
+          _loading = false;
+        });
+      }).catchError((error) {
+        // Show error message
+        MotionToast.error(
+          title: Text("Error"),
+          description: Text("Failed to update profile. $error"),
+        ).show(context);
+
+        setState(() {
+          _loading = false;
+        });
       });
     }
   }

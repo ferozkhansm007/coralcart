@@ -1,3 +1,4 @@
+import 'package:coralcart/screens/root_screen.dart';
 import 'package:flutter/material.dart';
 
 class cardScreen extends StatefulWidget {
@@ -9,6 +10,36 @@ class _cardScreenState extends State<cardScreen> {
   String cardNumber = '';
   String expiryDate = '';
   String cvc = '';
+
+  @override
+
+  // Function to show order placed dialog
+  Future<void> _showOrderPlacedDialog() async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Order Placed!'),
+          content: const Text('Your order has been successfully placed.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RootScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // Function to process payment
   void processPayment() {
@@ -102,15 +133,19 @@ class _cardScreenState extends State<cardScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
+            Spacer(),
             Center(
               child: ElevatedButton(
-                onPressed: processPayment,
+                onPressed: () {
+                  processPayment(); // Process payment
+                  _showOrderPlacedDialog(); // Show order placed dialog
+                },
                 child: Text(
                   'Pay Now',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Set button color to teal
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 ),
               ),
@@ -121,4 +156,3 @@ class _cardScreenState extends State<cardScreen> {
     );
   }
 }
-
