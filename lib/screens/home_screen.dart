@@ -10,37 +10,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+ String searchQuery = ''; // Add searchQuery variable
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Column(
         children: [
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           CurvedBottomContainer(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 3,
             logo: Image.asset(
-              'assets/images/logo.png', // Replace with your image asset path
+              'assets/images/logo.png',
               height: 100,
               width: 100,
-              
-              
             ),
-           
             searchBar: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
               ),
-              child: const TextField(
+              child: TextField(
+                onChanged: _handleSearch, // Call _handleSearch method
                 decoration: InputDecoration(
                   hintText: 'Search at Coral Cart',
                   suffixIcon: Icon(Icons.search),
                   border: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
               ),
             ),
@@ -49,9 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('category')
-                    .snapshots(),
+                stream: FirebaseFirestore.instance.collection('category').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -63,25 +59,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text('Error: ${snapshot.error}'),
                     );
                   }
+                  // Filter categories based on searchQuery
+                  final filteredCategories = snapshot.data!.docs.where((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    final category = data['category'] as String;
+                    return category.toLowerCase().contains(searchQuery.toLowerCase());
+                  }).toList();
                   return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Number of columns
-                      mainAxisSpacing: 10, // Spacing between rows
-                      crossAxisSpacing: 10, // Spacing between columns
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
                     ),
-                    itemCount: snapshot
-                        .data!.docs.length, // Number of items in the grid
+                    itemCount: filteredCategories.length,
                     itemBuilder: (context, index) {
-                      var data = snapshot.data!.docs[index].data()
-                          as Map<String, dynamic>;
+                      var data = filteredCategories[index].data() as Map<String, dynamic>;
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => PoductScreen(
-                                catid: snapshot.data!.docs[index].id,
+                                catid: filteredCategories[index].id,
                               ),
                             ),
                           );
@@ -101,8 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    data[
-                                        'image'], // Use imageUrl from Firestore data
+                                    data['image'],
                                     fit: BoxFit.cover,
                                     width: 200,
                                   ),
@@ -110,8 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                data[
-                                    'category'], // Use productName from Firestore data
+                                data['category'],
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
@@ -131,6 +128,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  void _handleSearch(String query) {
+    setState(() {
+      searchQuery = query;
+    });
+  }
+
+
+
 }
 
 class CurvedBottomContainer extends StatelessWidget {

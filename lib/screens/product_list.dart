@@ -21,7 +21,8 @@ class PoductScreen extends StatefulWidget {
 class _PoductScreenState extends State<PoductScreen> {
 
 
-  
+  String searchQuery = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +42,8 @@ class _PoductScreenState extends State<PoductScreen> {
                 width: 1,
               ),
             ),
-            child: const TextField(
+            child:  TextField(
+              onChanged:handleSearch,
               decoration: InputDecoration(
                 hintText: 'Search at Coral Cart',
                 suffixIcon: Icon(Icons.search),
@@ -69,24 +71,32 @@ class _PoductScreenState extends State<PoductScreen> {
                     child: Text('Error: ${snapshot.error}'),
                   );
                 }
+
+                final filteredproducts = snapshot.data!.docs.where((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    final category = data['productname'] as String;
+                    return category.toLowerCase().contains(searchQuery.toLowerCase());
+                  }).toList();
                 return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
+                  itemCount: filteredproducts.length,
                   itemBuilder: (context, index) {
-                    var data = snapshot.data!.docs[index].data()
+                    var data = filteredproducts[index].data()
                         as Map<String, dynamic>;
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ViewProductScreen(viewdata: data,productId: snapshot.data!.docs[index].id,),
+                            builder: (context) => ViewProductScreen(
+                              viewdata: data,
+                              productId:filteredproducts[index].id,
+                            ),
                           ),
                         );
                       },
                       child: ProductWidget(
                         productdata: data,
-                        id: snapshot.data!.docs[index].id,
+                        id: filteredproducts[index].id,
                       ),
                     );
                   },
@@ -116,7 +126,21 @@ class _PoductScreenState extends State<PoductScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
+
+
+  void handleSearch(String query) {
+    setState(() {
+      searchQuery = query;
+    });
+  }
+
+
+
+    
 }
+
+
+
 
 class ProductWidget extends StatefulWidget {
   ProductWidget({super.key, required this.productdata, required this.id});
@@ -181,7 +205,9 @@ class _ProductWidgetState extends State<ProductWidget> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        widget.productdata['shopname']==null ? 'shopname':widget.productdata['shopname'],
+                        widget.productdata['shopname'] == null
+                            ? 'shopname'
+                            : widget.productdata['shopname'],
                         style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                       SizedBox(height: 5),
@@ -204,20 +230,29 @@ class _ProductWidgetState extends State<ProductWidget> {
                                   await FirebaseAuth.instance.currentUser!.uid);
 
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PaymentScreen(
-                                      address: 'address',
-                                      cartidlist: [],
-                                      productList: [
-                                        {
-                                          'productname':
-                                              widget.productdata['productname'],
-                                        }
-                                      ],
-                                      Total: 'total',
-                                    ),
-                                  ));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentScreen(
+                                    address: '',
+                                    productList: [
+                                      {
+                                        "productId": widget.id,
+                                        "price": widget.productdata['price'],
+                                        "productname":
+                                            widget.productdata['productname'],
+                                        "imageUrl": widget.productdata['image'],
+                                        "sellerid":
+                                            widget.productdata['sellerId'],
+                                            "subtotal":widget.productdata['price'].toString(),
+                                        
+                                      }
+                                    ],
+                                    subtotal:
+                                        widget.productdata['price'].toString(),
+                                    cartidlist: [],
+                                  ),
+                                ),
+                              );
                             },
                           )),
                           SizedBox(

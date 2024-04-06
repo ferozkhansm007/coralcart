@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key, required this.address,  
   required this.productList, 
-  required this.Total, required this.cartidlist});
+  required this.subtotal, required this.cartidlist});
 
 
   final String address;
   final List productList;
   final List cartidlist;
-  final String Total;
+  final String subtotal;
 
 
   @override
@@ -109,7 +109,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                await  Future.delayed(Duration(seconds: 2));
                 
-                await FirebaseOrderServices().placeOrder(cartidlist: widget.cartidlist, address: widget.address,paymentMethod:_selectedPaymentMethod,total:widget.Total,productList: widget.productList);
+                await FirebaseOrderServices().placeOrder(cartidlist: widget.cartidlist, address: widget.address,paymentMethod:_selectedPaymentMethod,total:widget.subtotal,productList: widget.productList);
                 // Show custom pop-up message
                       await showDialog(
                         barrierDismissible:false ,

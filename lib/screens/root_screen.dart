@@ -14,10 +14,10 @@ class _RootScreenState extends State<RootScreen> {
   int _selectedIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[
-     HomeScreen(),
+    HomeScreen(),
     CartScreen(),
-      UserOrdersScreen(),
-      ProfileScreen(),
+    UserOrdersScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

@@ -26,7 +26,7 @@ Future<void>placeOrder({required List cartidlist, required String address,requir
       'cartidlist':cartidlist,
       'productlist':productList,
       'paymentmethod':paymentMethod,
-      'total':total,
+      'subtotal':total,
       'bookingtime': '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
       
       

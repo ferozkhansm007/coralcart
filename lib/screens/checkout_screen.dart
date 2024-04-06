@@ -138,7 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       cartidlist: [],
                       address: address!,
                       productList: productList,
-                      Total: widget.total.toString(),
+                      subtotal: widget.total.toString(),
                     ),
                   ),
                 );
